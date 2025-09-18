@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Wobble Guy</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: black;
+        }
+
+        #unity-canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<canvas id="unity-canvas" width="1080" height="1920" tabindex="-1"></canvas>
+<script>
+    var canvas = document.getElementById("unity-canvas");
+    var ratio = canvas.width / canvas.height;
+
+    function resizeCanvas() {
+        var parentWidth = window.innerWidth;
+        var parentHeight = window.innerHeight;
+        var newHeight = parentHeight;
+        var newWidth = newHeight * ratio;
+
+        if (newWidth > parentWidth) {
+            newWidth = parentWidth;
+            newHeight = newWidth / ratio;
+        }
+
+        canvas.style.width = newWidth + "px";
+        canvas.style.height = newHeight + "px";
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("load", resizeCanvas);
+
+    var buildUrl = "Build";
+    var config = {
+        dataUrl: buildUrl + "/WobbleGuy.data",
+        frameworkUrl: buildUrl + "/WobbleGuy.framework.js",
+        codeUrl: buildUrl + "/WobbleGuy.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Ikro Games",
+        productName: "Wobble Guy",
+        productVersion: "1.0"
+    };
+
+    var script = document.createElement("script");
+    script.src = buildUrl + "/WobbleGuy.loader.js";
+    script.onload = function() {
+        createUnityInstance(canvas, config).then((unityInstance) => {
+            console.log("Unity loaded!");
+        }).catch((message) => {
+            alert(message);
+        });
+    };
+    document.body.appendChild(script);
+</script>
+</body>
+</html>
