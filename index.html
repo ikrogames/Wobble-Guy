@@ -1,83 +1,40 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Wobble Guy</title>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: black;
-        }
+  </head>
+  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
+    <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: #231F20"></canvas>
+    <script src="Build/Wobble Guy ResolutionTest.loader.js"></script>
+    <script>
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
 
-        #unity-canvas {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
-</head>
-<body>
-<canvas id="unity-canvas" width="1080" height="1920" tabindex="-1"></canvas>
-<script>
-    var canvas = document.getElementById("unity-canvas");
-    var ratio = canvas.width / canvas.height;
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
 
-    function isMobile() {
-        return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-    }
+        document.body.style.textAlign = "left";
+      }
 
-    // Reduce internal resolution for mobile BEFORE loading Unity
-    if(isMobile()){
-        canvas.width = 720;
-        canvas.height = 1280;
-        ratio = canvas.width / canvas.height; // update ratio
-    }
-
-    function resizeCanvas() {
-        var parentWidth = window.innerWidth;
-        var parentHeight = window.innerHeight;
-        var newHeight = parentHeight;
-        var newWidth = newHeight * ratio;
-
-        if (newWidth > parentWidth) {
-            newWidth = parentWidth;
-            newHeight = newWidth / ratio;
-        }
-
-        canvas.style.width = newWidth + "px";
-        canvas.style.height = newHeight + "px";
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("load", resizeCanvas);
-
-    var buildUrl = "Build";
-    var config = {
-        dataUrl: buildUrl + "/WobbleGuy.data",
-        frameworkUrl: buildUrl + "/WobbleGuy.framework.js",
-        codeUrl: buildUrl + "/WobbleGuy.wasm",
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/Wobble Guy ResolutionTest.data",
+        frameworkUrl: "Build/Wobble Guy ResolutionTest.framework.js",
+        codeUrl: "Build/Wobble Guy ResolutionTest.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Ikro Games",
         productName: "Wobble Guy",
-        productVersion: "1.0"
-    };
-
-    var script = document.createElement("script");
-    script.src = buildUrl + "/WobbleGuy.loader.js";
-    script.onload = function() {
-        createUnityInstance(canvas, config).then((unityInstance) => {
-            console.log("Unity loaded!");
-        }).catch((message) => {
-            alert(message);
-        });
-    };
-    document.body.appendChild(script);
-</script>
-</body>
+        productVersion: "1.0",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      });
+    </script>
+  </body>
 </html>
