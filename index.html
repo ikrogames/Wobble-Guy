@@ -7,23 +7,26 @@
         body {
             margin: 0;
             background: #231F20;
-            text-align: center;
             overflow: hidden;
+            text-align: center;
+            font-family: sans-serif;
         }
         #Chargement {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
             color: white;
-            font-family: sans-serif;
+            text-align: center;
             transition: opacity 0.5s ease;
+            z-index: 10;
         }
         #unity-canvas {
-            background: #231F20;
             display: block;
             margin: 0 auto;
+            background: #231F20;
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
@@ -41,22 +44,7 @@
 <!-- Unity Loader Script -->
 <script src="Ikro Games-Tiqqa(Wobble Guy).loader.js"></script>
 <script>
-    createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "Ikro Games-Tiqqa(Wobble Guy).data",
-        frameworkUrl: "Ikro Games-Tiqqa(Wobble Guy).framework.js",
-        codeUrl: "Ikro Games-Tiqqa(Wobble Guy).wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Ikro Games",
-        productName: "Wobble Guy",
-        productVersion: "1.0",
-    }).then((unityInstance) => {
-        // Smooth fade-out
-        const loading = document.getElementById("Chargement");
-        loading.style.opacity = 0;
-        setTimeout(() => loading.style.display = "none", 500);
-    });
-
-    // Mobile optimization
+    // Mobile viewport setup
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         var meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -67,7 +55,28 @@
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.style.position = "fixed";
+        canvas.style.top = "0";
+        canvas.style.left = "0";
+
+        const loading = document.getElementById("Chargement");
+        loading.style.top = "50%";
+        loading.style.left = "50%";
     }
+
+    // Start Unity
+    createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Ikro Games-Tiqqa(Wobble Guy).data",
+        frameworkUrl: "Ikro Games-Tiqqa(Wobble Guy).framework.js",
+        codeUrl: "Ikro Games-Tiqqa(Wobble Guy).wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Ikro Games",
+        productName: "Wobble Guy",
+        productVersion: "1.0",
+    }).then((unityInstance) => {
+        const loading = document.getElementById("Chargement");
+        loading.style.opacity = 0;
+        setTimeout(() => loading.style.display = "none", 500);
+    });
 </script>
 
 </body>
