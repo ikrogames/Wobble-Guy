@@ -23,7 +23,9 @@
     </style>
 </head>
 <body>
+<!-- Set base resolution to portrait -->
 <canvas id="unity-canvas" width="1080" height="1920" tabindex="-1"></canvas>
+
 <script>
     var canvas = document.getElementById("unity-canvas");
     var ratio = canvas.width / canvas.height;
@@ -46,19 +48,21 @@
     window.addEventListener("resize", resizeCanvas);
     window.addEventListener("load", resizeCanvas);
 
+    // Unity build config
     var buildUrl = "Build";
     var config = {
-        dataUrl: buildUrl + "/WobbleGuy.data",
-        frameworkUrl: buildUrl + "/WobbleGuy.framework.js",
-        codeUrl: buildUrl + "/WobbleGuy.wasm",
+        dataUrl: buildUrl + "/WobbleGuyGame.data",
+        frameworkUrl: buildUrl + "/WobbleGuyGame.framework.js",
+        codeUrl: buildUrl + "/WobbleGuyGame.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Ikro Games",
         productName: "Wobble Guy",
         productVersion: "1.0"
     };
 
+    // Load Unity
     var script = document.createElement("script");
-    script.src = buildUrl + "/WobbleGuy.loader.js";
+    script.src = buildUrl + "/WobbleGuyGame.loader.js";
     script.onload = function() {
         createUnityInstance(canvas, config).then((unityInstance) => {
             console.log("Unity loaded!");
